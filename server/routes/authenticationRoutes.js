@@ -1,70 +1,113 @@
 /* eslint-disable no-console */
-import chalk            from 'chalk';
-import { Router }       from 'express';
-import cors             from 'cors';
-import { getUserModel } from '../data_access/modelFactory';
-import Promise          from 'bluebird';
+import chalk                  from 'chalk';
+import { Router }             from 'express';
+import cors                   from 'cors';
+import {
+  getUserModel,
+  getLoginsModel
+}                             from '../data_access/modelFactory';
+import Promise                from 'bluebird';
+import {
+  registrationSchema,
+  loginSchema
+}                             from '../validation/validationSchemas';
 
 const authenticationRouter = Router();
 
-authenticationRouter.route('/api/user/register')
-  .post(cors(), async (req, res) => {
+authenticationRouter.route("/api/user/register")
+  .post(cors(), async function (req, res) {
     try {
       const User = await getUserModel();
 
+      req.checkBody(registrationSchema);
+      const errors = req.validationErrors();
+
+      if (errors) {
+        return res.status(500).json(errors);
+      }
+
+      const {email, password, firstName, lastName} = req.body;
+
       const submittedEmail = req.body.email;
-      const existingUser = await User.findOne({username: submittedEmail}).exec();
+      const existingUser = await User.findOne({username: email}).exec();
       if (existingUser) {
-        return res.status(409).send(`The email ${submittedEmail} already exist.`);
+        return res.status(409).send(`The specified email ${submittedEmail} address already exists.`);
       }
 
       const submittedUser = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        firstName: firstName,
+        lastName: lastName,
         username: submittedEmail,
-        email: submittedEmail,
-        password: req.body.password,
+        email: email,
+        password: password,
         created: Date.now()
       };
 
-      console.log(chalk.green('Creating new User'));
+      console.log(chalk.yellow("Creating New User"));
       const user = new User(submittedUser);
 
       await user.save()
-        .then(user => {
+        .then(function (user) {
           if (user) {
-            console.log(chalk.green(`Created user ${JSON.stringify(user)}`));
+            console.log(chalk.yellow(`Created User ${JSON.stringify(user)}`));
           }
         })
-        .catch(err => {
+        .catch(function (err) {
           if (err) {
-            console.log(chalk.red(`Error occurred saving User ${user}`));
+            console.log(chalk.yellow(`Error occurred saving User ${err}`));
           }
         });
 
       res.status(201).json({user: {firstName: user.firstName, lastName: user.lastName, email: user.email}});
-
-    } catch ( err ) {
+    } catch (err) {
       throw err;
     }
   });
 
-authenticationRouter.route('/api/user/login')
+authenticationRouter.route("/api/user/login")
   .post(cors(), async function (req, res) {
+    const delayLogin = response => {
+      setTimeout(() => {
+        response();
+      }, 1000);
+    };
+
       try {
         const User = await getUserModel();
+
+        const {clientIp} = req;
         const {email, password} = req.body;
+
+        req.checkBody(loginSchema);
+        const errors = req.validationErrors();
+
+        if (errors) {
+          return delayLogin(() => res.status(401).send("Invalid username or password"));
+        }
+
+        const identityKey = `${email}-${clientIp}`;
+        const Logins = await getLoginsModel();
+
+        if (await Logins.inProgress(identityKey)) {
+          return delayLogin(() => res.status(500).send("Login already in progress."));
+        }
+
+        if(!await Logins.canAuthenticate(identityKey)){
+          return delayLogin(() => res.status(500).send("The account is temporarily locked out."));
+        }
+
         const existingUser = await User.findOne({username: email}).exec();
 
         if (!existingUser) {
-          return res.status(401).send('Invalid username or password');
+          await Logins.failedLoginAttempt(identityKey);
+          return delayLogin(() => res.status(401).send('Invalid username or password'));
         }
 
-        existingUser.passwordIsValid(password, function (err, results) {
+        existingUser.passwordIsValid(password, async function (err, results) {
           if (err) {
-            return res.status(500).send('There is a problem logging in at the moment. Please try again later');
+            return delayLogin(() => res.status(500).send('There is a problem logging in at the moment. Please try again later'));
           } else if (!results) {
-            return res.status(401).send('Invalid username or password');
+            return delayLogin(() => res.status(401).send('Invalid username or password'));
           }
 
           const userInfo = {
@@ -75,19 +118,21 @@ authenticationRouter.route('/api/user/login')
           };
 
           req.session.login(userInfo);
+          await Logins.successfulLoginAttempt(identityKey);
 
-          return res.status(200).json({
+          return delayLogin(() => res.status(200).json({
             firstName: existingUser.firstName,
             lastName: existingUser.lastName,
             username: existingUser.email
-          });
+          }));
         });
       }
       catch (err) {
-        return res.status(500).send('There is a problem logging in at the moment. Please try again later');
+        return delayLogin(() => res.status(500).send('There is a problem logging in at the moment. Please try again later'));
       }
     }
-  );
+  )
+;
 
 authenticationRouter.route('/api/user/logout')
   .get(cors(), function (req, res) {

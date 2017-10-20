@@ -8,7 +8,7 @@ export default function registrationReducer(state = registrationState, action) {
         ...state,
         isRequested: false,
         isRegistered: false,
-        errorMessage: action.errorMessage
+        errors: action.errors
       };
     case types.REGISTRATION_REQUEST:
       return {

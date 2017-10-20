@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Field, reduxForm}   from 'redux-form';
 import {Link}               from 'react-router-dom';
+import PropTypes            from 'prop-types';
 
 const validate = values => {
   const errors = {};
@@ -48,7 +49,7 @@ class RenderField extends Component {
   }
 }
 
-const RegistrationForm = ({handleSubmit, onSubmit}) => {
+const RegistrationForm = ({handleSubmit, onSubmit, errors}) => {
 
   return (
     <div className='register'>
@@ -74,6 +75,13 @@ const RegistrationForm = ({handleSubmit, onSubmit}) => {
                  placeholder='Confirm Password (required)' className='form-control' label='Confirm Password'
                  tabIndex='5'
           />
+          {/* todo errors not visible - check reducers and actions */}
+          {errors &&
+          errors.map((error, i) => {
+            return <div key={i} className="error"><span>{error.msg}</span></div>
+          })
+
+          }
           <button className='btn btn-primary' tabIndex='6'>Register</button>
         </form>
         <div className='register_sign-in'>
@@ -82,6 +90,12 @@ const RegistrationForm = ({handleSubmit, onSubmit}) => {
       </div>
     </div>
   );
+};
+
+RegistrationForm.propTypes = {
+  errors: PropTypes.array,
+  handleSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired
 };
 
 

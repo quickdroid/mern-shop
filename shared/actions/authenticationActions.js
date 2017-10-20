@@ -2,12 +2,12 @@ import * as types        from '../constants/actionTypes';
 import authenticationApi from '../api-services/authenticationApi';
 import history           from '../lib/history';
 
-function userRegistrationFailure(errorMessage) {
+function userRegistrationFailure(errors) {
   return {
     type: types.REGISTRATION_FAILURE,
     isRequested: false,
     isRegistered: false,
-    errorMessage
+    errors
   };
 }
 

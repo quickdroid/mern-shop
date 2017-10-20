@@ -24,7 +24,7 @@ class Registration extends Component {
     return (
       <RegistrationForm
         registration={registration}
-        errors={errors}
+        errors={errors.data}
         onSubmit={this.register}
       />
     );
