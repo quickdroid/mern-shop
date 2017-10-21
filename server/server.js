@@ -1,12 +1,12 @@
 import 'babel-polyfill';
-import express            from 'express';
-import morgan             from 'morgan';
-import bodyParser         from 'body-parser';
-import chalk              from 'chalk';
-import apiRouteConfig     from './configurations/apiRoutesConfig';
+import express                    from 'express';
+import morgan                     from 'morgan';
+import bodyParser                 from 'body-parser';
+import chalk                      from 'chalk';
+import apiRouteConfig             from './configurations/apiRoutesConfig';
 import sessionManagementConfig
-                          from './configurations/sessionsManagementConfig';
-import expressValidator  from 'express-validator';
+                                  from './configurations/sessionsManagementConfig';
+import expressValidator           from 'express-validator';
 /*eslint-disable no-console*/
 
 const DEFAULT_PORT = 8000,
@@ -16,8 +16,8 @@ const DEFAULT_PORT = 8000,
 sessionManagementConfig(app);
 
 //app.use(morgan('combined'));
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(expressValidator());
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

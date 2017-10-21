@@ -28,7 +28,7 @@ const axiosInstance = axios.create({
 const store = createStore(
   reducers,
   window.INITIAL_STATE,
-  applyMiddleware(thunk.withExtraArgument(axiosInstance), logger)
+  applyMiddleware(thunk.withExtraArgument(axiosInstance)/*, logger*/)
 );
 
 ReactDOM.hydrate(

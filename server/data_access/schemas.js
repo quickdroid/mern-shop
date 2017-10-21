@@ -1,11 +1,19 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose       from 'mongoose';
+import bcrypt         from 'bcrypt';
 
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  firstName: String,
-  lastName: String,
+  firstName: {
+    type: String,
+    match:/^[a-z ,.'-]+/,
+    maxLength: 100
+  },
+  lastName: {
+    type: String,
+    match:/^[a-z ,.'-]+/,
+    maxLength: 100
+  },
   username: {
     type: String,
     index: {

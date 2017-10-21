@@ -17,7 +17,6 @@ const authenticationRouter = Router();
 authenticationRouter.route("/api/user/register")
   .post(cors(), async function (req, res) {
     try {
-      const User = await getUserModel();
 
       req.checkBody(registrationSchema);
       const errors = req.validationErrors();
@@ -25,6 +24,8 @@ authenticationRouter.route("/api/user/register")
       if (errors) {
         return res.status(500).json(errors);
       }
+
+      const User = await getUserModel();
 
       const {email, password, firstName, lastName} = req.body;
 
@@ -117,8 +118,9 @@ authenticationRouter.route("/api/user/login")
             username: existingUser.email
           };
 
-          req.session.login(userInfo);
           await Logins.successfulLoginAttempt(identityKey);
+
+          req.session.login(userInfo);
 
           return delayLogin(() => res.status(200).json({
             firstName: existingUser.firstName,
