@@ -16,12 +16,13 @@ export default req => {
 
   let user = {};
   if (req.session.userInfo) {
-    const {firstName, lastName, username, _id} = req.session.userInfo;
+    const {firstName, lastName, username, _id, roles} = req.session.userInfo;
 
     user = {
       firstName,
       lastName,
-      username
+      username,
+      roles
     };
   }
 

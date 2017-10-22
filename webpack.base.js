@@ -8,8 +8,8 @@ module.exports = {
         options: {
           presets: [
             'react',
-            'stage-0',
-            ['env', { targets: { browsers: ['last 2 versions'] } }]
+            ['env', { targets: { browsers: ['last 2 versions'] } }],
+            'stage-0'
           ]
         }
       }

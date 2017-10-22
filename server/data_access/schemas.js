@@ -1,5 +1,8 @@
 import mongoose       from 'mongoose';
-import bcrypt         from 'bcrypt';
+import Promise          from "bluebird";
+
+
+const bcrypt = Promise.promisifyAll(require("bcrypt"));
 
 const Schema = mongoose.Schema;
 
@@ -17,7 +20,7 @@ const UserSchema = new Schema({
   username: {
     type: String,
     index: {
-      unique: true
+      unique: false
     }
   },
   password: {
@@ -35,7 +38,12 @@ const UserSchema = new Schema({
     type: Date,
     required: true,
     default: new Date()
+  },
+  roles: {
+    type: Array,
+    default: ["user"]
   }
+
 });
 
 UserSchema.methods.passwordIsValid = function (password, callback) {

@@ -11,3 +11,11 @@ body {
 .card {
   height: 100%;
 }
+
+.navLink {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  color: #fff;
+  background-color: #080808;
+}

@@ -1,26 +1,24 @@
-import React        from 'react';
-import { Navbar }   from 'react-bootstrap';
-import {
-  FaSignIn,
-  FaRegistered
-}                   from 'react-icons/lib/fa';
+import React                     from 'react';
+import { FaSignIn, FaRegistered} from 'react-icons/lib/fa';
+import { Link }                  from 'react-router-dom'
+import MenuItem                  from './menuItemComponent';
 
 const HeaderUserAuthNav = () => {
   return (
-    <div>
-      <Navbar.Brand key={1}>
-        <a href='/login'>
-          <FaSignIn/>
-          Login
-        </a>
-      </Navbar.Brand>,
-      <Navbar.Brand key={2}>
-        <a href='/register'>
-          <FaRegistered/>
-          Register
-        </a>
-      </Navbar.Brand>
-    </div>
+    <ul className='nav navbar-nav'>
+      <li>
+        <MenuItem Component={Link} to="/login">
+        <FaSignIn/>
+        Login
+      </MenuItem>
+      </li>
+      <li>
+        <MenuItem Component={Link} to="/register">
+        <FaRegistered/>
+        Register
+      </MenuItem>
+      </li>
+    </ul>
   );
 };
 

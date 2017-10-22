@@ -1,7 +1,9 @@
 import React, { Component }  from 'react';
 import PropTypes             from 'prop-types';
-import { Navbar }            from 'react-bootstrap';
-import FaSignOut from 'react-icons/lib/fa/sign-out';
+import FaSignOut             from 'react-icons/lib/fa/sign-out';
+import requiresAuth          from "../common/RequiresAuthComponent";
+import MenuItem              from './menuItemComponent';
+import { Link }              from 'react-router-dom'
 
 class HeaderUserProfile extends Component {
   constructor(props) {
@@ -10,19 +12,23 @@ class HeaderUserProfile extends Component {
 
   render() {
     const {user, logout} = this.props;
-
+    const func = () => <MenuItem Component={Link} to="/admin/users/1">Admin</MenuItem>;
+    const Component = requiresAuth(func, {role: "admin", user: user});
     return (
-      <div>
-        <Navbar.Brand key={1}>
-          <span className='profile-identity'>Welcome </span><span>{user.identity}</span>
-        </Navbar.Brand>,
-        <Navbar.Brand key={2}>
-          <a href='#' onClick={logout}>
+      <ul className='nav navbar-nav'>
+        <li>
+          <MenuItem Component={Link} to="/">{user.identity}</MenuItem>
+        </li>
+        <li>
+          <MenuItem Component={Link} to="/" onClick={logout}>
             <FaSignOut/>
-            logout
-          </a>
-        </Navbar.Brand>
-      </div>
+            Logout
+          </MenuItem>
+        </li>
+        <li>
+          <Component/>
+        </li>
+      </ul>
     );
   }
 }

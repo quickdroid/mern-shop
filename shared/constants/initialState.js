@@ -25,3 +25,8 @@ export const registrationState = {
   }
 };
 
+export const adminState = {
+  users: [],
+  totalPages: 0,
+  page: 0
+};

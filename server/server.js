@@ -7,6 +7,7 @@ import apiRouteConfig             from './configurations/apiRoutesConfig';
 import sessionManagementConfig
                                   from './configurations/sessionsManagementConfig';
 import expressValidator           from 'express-validator';
+
 /*eslint-disable no-console*/
 
 const DEFAULT_PORT = 8000,
@@ -28,6 +29,7 @@ app.use(express.static('public'));
 
 
 apiRouteConfig(app);
+
 
 app.listen(DEFAULT_PORT, function(err) {
   try {

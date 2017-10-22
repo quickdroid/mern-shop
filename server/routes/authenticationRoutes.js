@@ -115,7 +115,8 @@ authenticationRouter.route("/api/user/login")
             _id: existingUser._id,
             firstName: existingUser.firstName,
             lastName: existingUser.lastName,
-            username: existingUser.email
+            username: existingUser.email,
+            roles: existingUser.roles
           };
 
           await Logins.successfulLoginAttempt(identityKey);
@@ -125,7 +126,8 @@ authenticationRouter.route("/api/user/login")
           return delayLogin(() => res.status(200).json({
             firstName: existingUser.firstName,
             lastName: existingUser.lastName,
-            username: existingUser.email
+            username: existingUser.email,
+            roles: existingUser.roles
           }));
         });
       }
