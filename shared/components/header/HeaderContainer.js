@@ -37,33 +37,11 @@ class Header extends Component {
 
     return (
       <div>
-
         <nav className="navbar navbar-inverse">
           <div className="container-fluid">
-
             {!_.isEmpty(user) && <HeaderUserProfile user={user} logout={this.logout}/> || <HeaderUserAuthNav /> }
-
-
-{/*            <ul className="nav navbar-nav">
-              <li><Link className="navLink" to="/">MERN SHOP</Link></li>
-              <li><a href="#">Page 2</a></li>
-              <li><a href="#">Page 3</a></li>
-            </ul>*/}
           </div>
         </nav>
-
-
-{/*        <Navbar inverse collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <Link to="/">MERN SHOP</Link>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            {!_.isEmpty(user) && <HeaderUserProfile user={user} logout={this.logout}/> || <HeaderUserAuthNav /> }
-          </Navbar.Collapse>
-        </Navbar>*/}
       </div>
     );
   }

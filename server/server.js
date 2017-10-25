@@ -4,13 +4,16 @@ import morgan                     from 'morgan';
 import bodyParser                 from 'body-parser';
 import chalk                      from 'chalk';
 import apiRouteConfig             from './configurations/apiRoutesConfig';
-import sessionManagementConfig
-                                  from './configurations/sessionsManagementConfig';
+import sessionManagementConfig    from './configurations/sessionsManagementConfig';
+import redirectRequest            from './configurations/redirectRequest';
 import expressValidator           from 'express-validator';
+import https                      from 'https';
+import pem                        from 'pem';
 
 /*eslint-disable no-console*/
 
-const DEFAULT_PORT = 8000,
+const insecurePort = 8000,
+  insecureApp = express(),
   app = express(),
   host = 'localhost';
 
@@ -27,18 +30,23 @@ app.use((req, res, next) => {
 });
 app.use(express.static('public'));
 
-
+//redirectRequest(insecureApp);
 apiRouteConfig(app);
 
-
-app.listen(DEFAULT_PORT, function(err) {
-  try {
+try {
+  app.listen(insecurePort, function(err) {
     if (err) {
-      console.log(err);
-    } else {
-      console.log(chalk.green(`Express server listening at http://${host}:${DEFAULT_PORT}...`));
+      throw err;
     }
-  } catch (err) {
-    console.log(chalk.red(err));
-  }
-});
+    console.log(chalk.green(`Express server listening at http://${host}:${insecurePort}...`));
+  });
+/*  pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
+    if (err) {
+      throw err
+    }
+    https.createServer({ key: keys.serviceKey, cert: keys.certificate }, app).listen(443);
+  });*/
+
+} catch (err) {
+  console.log(chalk.red(err));
+}

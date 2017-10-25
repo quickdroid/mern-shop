@@ -34,7 +34,7 @@ function removeUserRequested(){
     }
 }
 
-function removeUserCompleted(user) {
+export function removeUserCompleted(user) {
     return {
         type: types.REMOVE_USER_COMPLETED,
         isRequested: false,

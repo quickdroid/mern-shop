@@ -1,3 +1,4 @@
+/*eslint-disable no-console*/
 import {Router}         from "express";
 import { getUserModel } from "../data_access/modelFactory";
 import RBAC             from "../data_access/rbac";

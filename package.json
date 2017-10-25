@@ -14,10 +14,26 @@
     "lint:watch": "npm run lint -- --watch",
     "slate": "rimraf -rf ./node_modules && npm install",
     "security:check": "nsp check",
-    "share:work": "npm-run-all --parallel dev localtunnel"
+    "share:work": "npm-run-all --parallel dev localtunnel",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
   },
   "author": "Mike",
   "license": "MIT",
+  "jest": {
+    "verbose": true,
+    "collectCoverageFrom": [
+    "*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 50,
+        "branches": 50,
+        "functions:": 50,
+        "lines": 100
+      }
+    }
+  },
   "dependencies": {
     "axios": "0.16.2",
     "bcrypt": "1.0.3",
@@ -31,7 +47,9 @@
     "express": "4.16.2",
     "express-session": "^1.15.6",
     "express-validator": "^4.2.1",
+    "fs": "0.0.1-security",
     "history": "^4.7.2",
+    "https": "^1.0.0",
     "lodash": "4.17.4",
     "moment": "^2.19.1",
     "mongoose": "^4.12.3",
@@ -55,6 +73,7 @@
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-eslint": "^8.0.1",
+    "babel-jest": "^21.2.0",
     "babel-loader": "7.1.2",
     "babel-preset-env": "1.6.1",
     "babel-preset-es2015": "6.24.1",
@@ -68,12 +87,17 @@
     "eslint-plugin-react": "^7.4.0",
     "eslint-watch": "^3.1.3",
     "file-loader": "^1.1.5",
+    "jest": "^21.2.1",
+    "jest-cli": "^21.2.1",
     "localtunnel": "^1.8.3",
     "node-sass": "^4.5.3",
     "nodemon": "1.12.1",
     "npm-run-all": "4.1.1",
     "nsp": "^2.8.1",
+    "pem": "^1.12.3",
     "prop-types": "^15.6.0",
+    "react-addons-test-utils": "^15.6.2",
+    "react-test-renderer": "^16.0.0",
     "redux-logger": "^3.0.6",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",
